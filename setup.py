@@ -14,7 +14,7 @@ setup(
     description="A Latin Hypercube Sampler for SAR (Specific Absorption Rate) testing scenarios",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/cbujard/sarsampling-iec62209",
+    url="https://github.com/ITISFoundation/sarsampling-iec62209",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[
