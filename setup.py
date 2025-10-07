@@ -17,6 +17,7 @@ setup(
     url="https://github.com/ITISFoundation/sarsampling-iec62209",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    package_data={"sar_sampling": ["data/*.csv"]},
     classifiers=[
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
