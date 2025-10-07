@@ -18,6 +18,9 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     package_data={"sar_sampling": ["data/*.csv"]},
+    entry_points={'console_scripts': [
+        'sarsample = sar_sampling.valset_producer:main'
+    ]},
     classifiers=[
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
