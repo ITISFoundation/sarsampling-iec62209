@@ -1,9 +1,12 @@
+import logging
+import os
 import importlib.resources as pkg_resources
 import pandas as pd
 from io import StringIO
+from pathlib import Path
 from sar_sampling import SarSampler
 
-def main(arg=None) -> None:
+def main(logger: logging.Logger | None=None) -> None:
     """
     Main function to generate a sample dataset using SAR sampling.
     
@@ -26,8 +29,14 @@ def main(arg=None) -> None:
         input_df = pd.read_csv(StringIO(csv_content))
         sampler = SarSampler(input_df)
         sample = sampler(n_samples=225)
-        sample.to_csv(f"sample_225.csv")
-        print(f"Sample saved.")
+        output_dir = Path.cwd()
+        if os.path.isdir("OUTPUTS_FOLDER"):
+            output_dir = Path(os.getenv("OUTPUTS_FOLDER")) / "output_1"
+        output_file = output_dir / "sample_225.csv"
+        sample.to_csv(f"{output_file}")
+        if logger:
+            logger.info(f"\n {sample}")
+            logger.info(f"Sample saved to {output_dir}.")
     except Exception as e:
         print(f"Error: {e}")
         import traceback
