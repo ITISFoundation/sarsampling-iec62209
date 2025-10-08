@@ -29,9 +29,11 @@ def main(logger: logging.Logger | None=None) -> None:
         input_df = pd.read_csv(StringIO(csv_content))
         sampler = SarSampler(input_df)
         sample = sampler(n_samples=225)
-        output_dir = Path.cwd()
-        if os.path.isdir("OUTPUTS_FOLDER"):
-            output_dir = Path(os.getenv("OUTPUTS_FOLDER")) / "output_1"
+        output_dir = os.getenv("OUTPUTS_FOLDER")
+        if output_dir and os.path.isdir(output_dir):
+            output_dir = Path(output_dir) / "output_1"
+        else:
+            output_dir = Path.cwd()
         output_file = output_dir / "sample_225.csv"
         sample.to_csv(f"{output_file}")
         if logger:
