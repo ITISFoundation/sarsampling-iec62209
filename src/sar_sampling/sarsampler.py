@@ -108,6 +108,8 @@ class SarSampler:
             'angle_domain': [0, 20, 40, 65, 90, 110, 130, 155],
             'power_domain': list(range(0, 21, 1)),
             'freqradvor_to_weight': lambda f, r, v: 1/r,
+            'input_frequency_min': 1,
+            'input_frequency_max': 10000,
             'frequency_margin': 0.1,
             'frequency_min': 0,
             'frequency_max': 10000,
@@ -122,6 +124,10 @@ class SarSampler:
         try:
             if isinstance(input_table, str):
                 input_table = SarSampler._read_input_table(input_table)
+            input_table = SarSampler._filter_input_table(
+                input_table, 
+                self.config['input_frequency_min'], 
+                self.config['input_frequency_max'])
             input_table = SarSampler._validate_input_table(input_table)
             tables = SarSampler._process_input_table(input_table)
             self.config = {**self.config, **tables}
@@ -255,6 +261,15 @@ class SarSampler:
             )
         
         return df
+
+    @staticmethod
+    def _filter_input_table(df: pd.DataFrame, fmin: float, fmax: float) -> pd.DataFrame:
+        """Filter input table by frequency range."""
+        if 'frequency' not in df.columns:
+            raise ValueError("input table must contain 'frequency' column")
+        if fmin < 0 or fmax < fmin:
+            raise ValueError(f"invalid frequency range: [{fmin}, {fmax}]")
+        return df[df['frequency'].between(fmin, fmax)]
 
     @staticmethod
     def _validate_input_table(df: pd.DataFrame) -> pd.DataFrame:
